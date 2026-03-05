@@ -4,8 +4,8 @@ import { generateNewUserData } from '../../src/common/testData/generateNewUserDa
 
 export const test = base.extend<
   {
-    user;
-    infoTestLog;
+    user: GenerateNewUserData;
+    infoTestLog: InfoTestLog;
   },
   {
     logger;
