@@ -1,38 +1,18 @@
-import { test } from '@playwright/test';
-import { HomePage } from '../../src/ui/pages/HomePage';
-import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
-import { generateNewArticleData } from '../../src/common/testData/generateNewArticleData';
+import { test } from '../_fixtures/fixtures';
 import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
-import { ViewArticlePage } from '../../src/ui/pages/article/ViewArticlePage';
 import { createArticle } from '../../src/ui/actions/article/createNewArticle';
-import { EditArticlePage } from '../../src/ui/pages/article/EditArticlePage';
 
-let homePage;
-let viewArticlePage;
-let article;
-let editArticlePage;
-let articleUrl;
-let updatedArticle;
-
-test.beforeEach(async ({ page }) => {
-  homePage = new HomePage(page);
-  viewArticlePage = new ViewArticlePage(page);
-  article = generateNewArticleData();
-  editArticlePage = new EditArticlePage(page);
-  const user = generateNewUserData();
-
+test.beforeEach(async ({ page, user, articleWithoutTags }) => {
   await signUpUser(page, user);
-
-  await homePage.clickNewArticleLink();
-  await createArticle(page, article);
+  await createArticle(page, articleWithoutTags);
 });
 
-test('Edit description for article', async ({ page }) => {
-  articleUrl = page.url();
+test('Edit description for article', async ({
+  viewArticlePage,
+  editArticlePage,
+  articleWithoutTags,
+}) => {
   await viewArticlePage.clickEditArticleButton();
-  updatedArticle = generateNewArticleData();
-  await editArticlePage.editArticleDescription(updatedArticle);
+  await editArticlePage.editArticleDescription(articleWithoutTags);
   await editArticlePage.clickUpdateArticleButton();
-  await page.waitForURL(articleUrl);
-  await page.reload();
 });

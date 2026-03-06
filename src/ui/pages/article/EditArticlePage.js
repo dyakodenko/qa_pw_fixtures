@@ -72,13 +72,6 @@ export class EditArticlePage {
     });
   }
 
-  async clickUpdateArticleButtonandWaitForNavigation() {
-    await test.step(`Click update article button`, async () => {
-      await this.updateArticleButton.click();
-      await this.page.waitForURL(/\/article\/.*/);
-    });
-  }
-
   async assertErrorMessageContainsText(messageText) {
     await test.step(`Assert the '${messageText}' error is shown`, async () => {
       await expect(this.errorMessage).toContainText(messageText);

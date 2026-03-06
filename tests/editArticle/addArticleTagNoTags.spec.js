@@ -8,14 +8,12 @@ test.beforeEach(async ({ page, user, articleWithoutTags }) => {
 });
 
 test('Edit tag for article if no tags', async ({
-  page,
   viewArticlePage,
   editArticlePage,
   articleWithTwoTags,
 }) => {
   await viewArticlePage.clickEditArticleButton();
   await editArticlePage.editArticleTags(articleWithTwoTags);
-  await editArticlePage.clickUpdateArticleButtonandWaitForNavigation();
-  await page.reload();
+  await editArticlePage.clickUpdateArticleButton();
   await viewArticlePage.assertArticleTagsAreVisible(articleWithTwoTags.tags);
 });

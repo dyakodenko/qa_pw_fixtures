@@ -1,39 +1,21 @@
-import { test } from '@playwright/test';
-import { HomePage } from '../../src/ui/pages/HomePage';
-import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
-import { generateNewArticleData } from '../../src/common/testData/generateNewArticleData';
+import { test } from '../_fixtures/fixtures';
 import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
-import { ViewArticlePage } from '../../src/ui/pages/article/ViewArticlePage';
 import { createArticle } from '../../src/ui/actions/article/createNewArticle';
-import { EditArticlePage } from '../../src/ui/pages/article/EditArticlePage';
 
-let homePage;
-let viewArticlePage;
-let article;
-let editArticlePage;
-let articleUrl;
 let tagToRemove;
 
-test.beforeEach(async ({ page }) => {
-  homePage = new HomePage(page);
-  viewArticlePage = new ViewArticlePage(page);
-  article = generateNewArticleData(3);
-  tagToRemove = article.tags[0];
-  editArticlePage = new EditArticlePage(page);
-  const user = generateNewUserData();
-
+test.beforeEach(async ({ page, user, articleWithTwoTags }) => {
   await signUpUser(page, user);
-
-  await homePage.clickNewArticleLink();
-  await createArticle(page, article);
+  await createArticle(page, articleWithTwoTags);
+  tagToRemove = articleWithTwoTags.tags[0];
 });
 
-test('Remove tag from article', async ({ page }) => {
-  articleUrl = page.url();
+test('Remove tag from article', async ({
+  viewArticlePage,
+  editArticlePage,
+}) => {
   await viewArticlePage.clickEditArticleButton();
   await editArticlePage.removeArticleTag(tagToRemove);
   await editArticlePage.clickUpdateArticleButton();
-  await page.waitForURL(articleUrl);
-  await page.reload();
   await viewArticlePage.verifyThatTagRemoved(tagToRemove);
 });

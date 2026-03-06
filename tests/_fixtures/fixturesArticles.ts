@@ -1,15 +1,9 @@
 import { test as base } from '@playwright/test';
-import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
 import { CreateArticlePage } from '../../src/ui/pages/article/CreateArticlePage';
 import { ViewArticlePage } from '../../src/ui/pages/article/ViewArticlePage';
 import { EditArticlePage } from '../../src/ui/pages/article/EditArticlePage';
 import { generateNewArticleData } from '../../src/common/testData/generateNewArticleData';
-
-export interface User {
-  username: string;
-  email: string;
-  password: string;
-}
+import { Logger } from '../../src/common/logger/Logger';
 
 export interface GeneratedArticle {
   title: string;
@@ -18,19 +12,19 @@ export interface GeneratedArticle {
   tags: string[];
 }
 
-export const test = base.extend<{
-  user: User;
-  createArticlePage: CreateArticlePage;
-  viewArticlePage: ViewArticlePage;
-  editArticlePage: EditArticlePage;
-  articleWithoutTags: GeneratedArticle;
-  articleWithOneTag: GeneratedArticle;
-  articleWithTwoTags: GeneratedArticle;
-}>({
-  user: async ({}, use) => {
-    const user = generateNewUserData();
-    await use(user);
+export const test = base.extend<
+  {
+    createArticlePage: CreateArticlePage;
+    viewArticlePage: ViewArticlePage;
+    editArticlePage: EditArticlePage;
+    articleWithoutTags: GeneratedArticle;
+    articleWithOneTag: GeneratedArticle;
+    articleWithTwoTags: GeneratedArticle;
   },
+  {
+    logger: Logger;
+  }
+>({
   createArticlePage: async ({ page }, use) => {
     const createArticlePage = new CreateArticlePage(page);
 
@@ -46,16 +40,16 @@ export const test = base.extend<{
 
     await use(editArticlePage);
   },
-  articleWithoutTags: async ({}, use) => {
-    const articleWithoutTags = generateNewArticleData(null, 0);
+  articleWithoutTags: async ({ logger }, use) => {
+    const articleWithoutTags = generateNewArticleData(logger, 0);
     await use(articleWithoutTags);
   },
-  articleWithOneTag: async ({}, use) => {
-    const articleWithOneTag = generateNewArticleData(null, 1);
+  articleWithOneTag: async ({ logger }, use) => {
+    const articleWithOneTag = generateNewArticleData(logger, 1);
     await use(articleWithOneTag);
   },
-  articleWithTwoTags: async ({}, use) => {
-    const articleWithTwoTags = generateNewArticleData(null, 2);
+  articleWithTwoTags: async ({ logger }, use) => {
+    const articleWithTwoTags = generateNewArticleData(logger, 2);
     await use(articleWithTwoTags);
   },
 });

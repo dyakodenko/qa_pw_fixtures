@@ -1,39 +1,19 @@
-import { test } from '@playwright/test';
-import { HomePage } from '../../src/ui/pages/HomePage';
-import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
-import { generateNewArticleData } from '../../src/common/testData/generateNewArticleData';
+import { test } from '../_fixtures/fixtures';
 import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
-import { ViewArticlePage } from '../../src/ui/pages/article/ViewArticlePage';
 import { createArticle } from '../../src/ui/actions/article/createNewArticle';
-import { EditArticlePage } from '../../src/ui/pages/article/EditArticlePage';
 
-let homePage;
-let viewArticlePage;
-let article;
-let editArticlePage;
-let articleUrl;
-let updatedArticle;
-
-test.beforeEach(async ({ page }) => {
-  homePage = new HomePage(page);
-  viewArticlePage = new ViewArticlePage(page);
-  article = generateNewArticleData(3);
-  editArticlePage = new EditArticlePage(page);
-  const user = generateNewUserData();
-
+test.beforeEach(async ({ page, user, articleWithOneTag }) => {
   await signUpUser(page, user);
-
-  await homePage.clickNewArticleLink();
-  await createArticle(page, article);
+  await createArticle(page, articleWithOneTag);
 });
 
-test('Edit tag for article if there tags', async ({ page }) => {
-  articleUrl = page.url();
+test('Edit tag for article if there tags', async ({
+  viewArticlePage,
+  editArticlePage,
+  articleWithTwoTags,
+}) => {
   await viewArticlePage.clickEditArticleButton();
-  updatedArticle = generateNewArticleData(1);
-  await editArticlePage.editArticleTags(updatedArticle);
+  await editArticlePage.editArticleTags(articleWithTwoTags);
   await editArticlePage.clickUpdateArticleButton();
-  await page.waitForURL(articleUrl);
-  await page.reload();
-  await viewArticlePage.assertArticleTagsAreVisible(updatedArticle.tags);
+  await viewArticlePage.assertArticleTagsAreVisible(articleWithTwoTags.tags);
 });
