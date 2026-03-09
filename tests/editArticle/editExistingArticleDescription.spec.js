@@ -15,4 +15,5 @@ test('Edit description for article', async ({
   await viewArticlePage.clickEditArticleButton();
   await editArticlePage.editArticleDescription(articleWithoutTags);
   await editArticlePage.clickUpdateArticleButton();
+  await viewArticlePage.assertArticleTextIsVisible(articleWithoutTags.text);
 });

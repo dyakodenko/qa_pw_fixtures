@@ -6,7 +6,9 @@ export class EditArticlePage {
     this.articleTitle = page.getByPlaceholder('Article Title');
     this.articleDesc = page.getByPlaceholder(`What's this article about?`);
 
-    this.articleText = page.getByPlaceholder('Write your article (in');
+    this.articleText = page.getByPlaceholder(
+      'Write your article (in markdown)',
+    );
     this.updateArticleButton = page.getByRole('button', {
       name: 'Update Article',
     });
@@ -27,19 +29,19 @@ export class EditArticlePage {
   }
 
   async editArticleDescription(article) {
-    await test.step(`Edit aticle title`, async () => {
+    await test.step(`Edit aticle description`, async () => {
       await this.articleDesc.fill(article.description);
     });
   }
 
   async removeDescription() {
-    await test.step(`Remove aticle title`, async () => {
+    await test.step(`Remove aticle description`, async () => {
       await this.articleDesc.fill('');
     });
   }
 
   async editArticleText(article) {
-    await test.step(`Edit aticle title`, async () => {
+    await test.step(`Edit aticle text`, async () => {
       await this.articleText.fill(article.text);
     });
   }

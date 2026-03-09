@@ -10,10 +10,10 @@ test.beforeEach(async ({ page, user, articleWithoutTags }) => {
 test('Edit title for article', async ({
   viewArticlePage,
   editArticlePage,
-  articleWithoutTags,
+  articleWithOneTag,
 }) => {
   await viewArticlePage.clickEditArticleButton();
-  await editArticlePage.editArticleTitle(articleWithoutTags);
+  await editArticlePage.editArticleTitle(articleWithOneTag);
   await editArticlePage.clickUpdateArticleButton();
-  await viewArticlePage.assertArticleTitleIsVisible(articleWithoutTags.title);
+  await viewArticlePage.assertArticleTitleIsVisible(articleWithOneTag.title);
 });
