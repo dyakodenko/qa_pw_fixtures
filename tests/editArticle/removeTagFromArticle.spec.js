@@ -4,11 +4,25 @@ import { createArticle } from '../../src/ui/actions/article/createNewArticle';
 
 let tagToRemove;
 
-test.beforeEach(async ({ page, user, articleWithTwoTags }) => {
-  await signUpUser(page, user);
-  await createArticle(page, articleWithTwoTags);
-  tagToRemove = articleWithTwoTags.tags[0];
-});
+test.beforeEach(
+  async ({
+    page,
+    user,
+    articleWithTwoTags,
+    homePage,
+    viewArticlePage,
+    createArticlePage,
+  }) => {
+    await signUpUser(page, user);
+    await createArticle(
+      articleWithTwoTags,
+      homePage,
+      viewArticlePage,
+      createArticlePage,
+    );
+    tagToRemove = articleWithTwoTags.tags[0];
+  },
+);
 
 test('Remove tag from article', async ({
   viewArticlePage,

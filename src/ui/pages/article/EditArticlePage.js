@@ -17,7 +17,7 @@ export class EditArticlePage {
   }
 
   async editArticleTitle(article) {
-    await test.step(`Edit aticle title`, async () => {
+    await test.step(`Edit article title`, async () => {
       await this.articleTitle.fill(article.title);
     });
   }

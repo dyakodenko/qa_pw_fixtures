@@ -1,26 +1,14 @@
-import { test } from '@playwright/test';
-import { SignInPage } from '../../src/ui/pages/auth/SignInPage';
-import { HomePage } from '../../src/ui/pages/HomePage';
+import { test } from '../_fixtures/fixtures';
 
-let signInPage;
-let homePage;
-let user;
+let user = {
+  email: 'ydo1991@gmail.com',
+  password: '123456',
+};
 
-test.beforeEach(async ({ page }) => {
-  signInPage = new SignInPage(page);
-  homePage = new HomePage(page);
-
-  user = {
-    email: 'test_new_user1@gmail.com',
-    password: 'newpass123!',
-  };
-});
-
-test('Successful `Sign in` flow test', async () => {
+test('Successful `Sign in` flow test', async ({ signInPage, homePage }) => {
   await signInPage.open();
   await signInPage.fillEmailField(user.email);
   await signInPage.fillPasswordField(user.password);
   await signInPage.clickSignInButton();
-
   await homePage.assertYourFeedTabIsVisible();
 });
